@@ -13,5 +13,8 @@ namespace Naldthal
         [DllImport("kernel32.dll", SetLastError = true)]
         internal static extern bool WriteProcessMemory(IntPtr hProcess,
             IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out UIntPtr lpNumberOfBytesWritten);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern ushort GetAsyncKeyState(int nVirtKey);
     }
 }
