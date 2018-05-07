@@ -185,7 +185,6 @@ namespace Naldthal
                             }
                         }
 
-                        /*
                         if (_data.InstanceContentIds.TryGetValue(itemId, out var icIds))
                         {
                             Util.WriteColorizedString(ms, "> 다음 임무에서 입수", Color.Normal);
@@ -198,7 +197,6 @@ namespace Naldthal
                                 ms.WriteByte(0xA);
                             }
                         }
-                        */
 
                         if (ms.Length > 0)
                         {
