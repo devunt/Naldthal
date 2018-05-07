@@ -8,11 +8,6 @@
 ![](https://i.imgur.com/SJm0kWQ.png) ![](https://i.imgur.com/fw1wOmD.png) ![](https://i.imgur.com/5OHZfp1.png) ![](https://i.imgur.com/YWde7hZ.png) ![](https://i.imgur.com/jujblks.png)
 
 
-# 안내
-* 본 저장소는 본 프로그램의 배포용이 아닌, 유사 프로그램을 만들고자 하는 분들을 위한 소스코드 공유용입니다.
-* 저작권이 걸려있는 일부 인게임 데이터가 빠져있어 동작하지 않습니다.
-
-
 # 경고
 * 본 프로그램의 사용은 **파이널판타지14 한국 운영 약관의 위반**입니다.
 * 본 프로그램을 사용함으로써 발생하는 모든 문제는 사용자 본인의 책임입니다.
