@@ -78,6 +78,10 @@ namespace Naldthal
                     {
                         itemId -= 1000000;
                     }
+                    else if (itemId > 500000)
+                    {
+                        itemId -= 500000;
+                    }
 
                     using (var ms = new MemoryStream())
                     {
