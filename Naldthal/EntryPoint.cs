@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.Remoting;
 using EasyHook;
 
@@ -20,7 +21,7 @@ namespace Naldthal
         {
             try
             {
-                Util.Log("Payload loaded.");
+                Debug.WriteLine("[NT] Payload loaded.");
 
                 Hook.Install();
                 RemoteHooking.WakeUpProcess();
@@ -29,6 +30,7 @@ namespace Naldthal
             }
             catch (RemotingException)
             {
+                Debug.WriteLine("[NT] Bridge is broken.");
             }
             catch (Exception ex)
             {
@@ -39,7 +41,7 @@ namespace Naldthal
             {
                 Hook.Release();
 
-                Util.Log("Payload unloaded.");
+                Debug.WriteLine("[NT] Payload unloaded.");
             }
         }
     }

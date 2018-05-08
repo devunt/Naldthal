@@ -47,11 +47,6 @@ namespace Naldthal
             NativeMethods.WriteProcessMemory(CurrentProcess.Handle, offset, buffer, (uint)size, out var _);
         }
 
-        public static void WriteMemory(IntPtr offset, int addOffset, byte[] buffer, int size)
-        {
-            WriteMemory(IntPtr.Add(offset, addOffset), buffer, size);
-        }
-
         public static byte[] ReadCStringAsBytes(IntPtr offset)
         {
             using (var ms = new MemoryStream(1024))
@@ -74,55 +69,6 @@ namespace Naldthal
             }
 
             return new byte[0];
-        }
-
-        public static string ReadCString(IntPtr offset)
-        {
-            return Encoding.UTF8.GetString(ReadCStringAsBytes(offset));
-        }
-
-        public static string ReadString(IntPtr offset, int size)
-        {
-            var bytes = ReadMemory(offset, size);
-            var z = Array.IndexOf(bytes, 0);
-            return Encoding.UTF8.GetString(bytes, 0, z == -1 ? bytes.Length : z);
-        }
-
-        public static string ReadString(IntPtr offset, int addOffset, int size)
-        {
-            return ReadString(IntPtr.Add(offset, addOffset), size);
-        }
-
-        public static void WriteString(IntPtr offset, string text, int size)
-        {
-            var buffer = new byte[size];
-            var encoded = Encoding.UTF8.GetBytes(text);
-            var encodedSize = Math.Min(encoded.Length, size - 1);
-
-            Array.Copy(encoded, buffer, encodedSize);
-            buffer[encodedSize] = 0;
-
-            WriteMemory(offset, buffer, size);
-        }
-
-        public static void WriteString(IntPtr offset, int addOffset, string text, int size)
-        {
-            WriteString(IntPtr.Add(offset, addOffset), text, size);
-        }
-
-        public static void Log(object format, params object[] args)
-        {
-            if (format is IntPtr ptr)
-            {
-                format = ptr.ToString("X");
-            }
-
-            if (format is IEnumerable<byte> bytes)
-            {
-                format = BitConverter.ToString(bytes.ToArray()).Replace('-', ' ');
-            }
-
-            Debug.WriteLine("[NT] "  + string.Format(format.ToString(), args));
         }
 
         public static void WriteColorizedString(MemoryStream ms, string text, Color color)

@@ -45,6 +45,8 @@ namespace Naldthal
 
             _sharedBuffer = Marshal.AllocHGlobal(2048);
             _bridge.WriteLine($"Shared buffer allocated at 0x{_sharedBuffer.ToInt64():X}");
+
+            _bridge.WriteLine("Successfully initialized.");
         }
 
         public static void Join()

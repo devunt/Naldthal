@@ -27,6 +27,7 @@ namespace NaldthalInjector
                 Path.GetFullPath("data.json")
             );
 
+            Console.WriteLine("Press enter key to unload.");
             Console.ReadLine();
         }
     }
