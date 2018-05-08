@@ -46,6 +46,9 @@
     <StartupObject>NaldthalInjector.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EasyHook, Version=2.7.6684.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.6684\lib\net40\EasyHook.dll</HintPath>
@@ -61,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
