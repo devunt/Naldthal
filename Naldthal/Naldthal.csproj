@@ -70,7 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BridgeInterface.cs" />
+    <Compile Include="Bridge.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Hook.cs" />

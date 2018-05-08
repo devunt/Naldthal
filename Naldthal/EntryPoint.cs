@@ -7,11 +7,11 @@ namespace Naldthal
 {
     public class EntryPoint : IEntryPoint
     {
-        private readonly BridgeInterface _bridge;
+        private readonly Bridge _bridge;
 
         public EntryPoint(RemoteHooking.IContext context, string channelName, string dataJsonPath)
         {
-            _bridge = RemoteHooking.IpcConnectClient<BridgeInterface>(channelName);
+            _bridge = RemoteHooking.IpcConnectClient<Bridge>(channelName);
             _bridge.Ping();
 
             Hook.Initialize(_bridge, dataJsonPath);

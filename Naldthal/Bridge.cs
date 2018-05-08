@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Naldthal
 {
-    public class BridgeInterface : MarshalByRefObject
+    public class Bridge : MarshalByRefObject
     {
         public void WriteLine()
         {
@@ -27,6 +26,8 @@ namespace Naldthal
             Console.WriteLine(format.ToString(), args);
         }
 
-        public void Ping() { }
+        public void Ping()
+        {
+        }
     }
 }

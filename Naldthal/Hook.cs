@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using EasyHook;
 using Newtonsoft.Json;
@@ -12,41 +10,43 @@ namespace Naldthal
 {
     internal static class Hook
     {
-        private static BridgeInterface _bridge;
+        private static Bridge _bridge;
         private static Data _data;
 
-        private delegate IntPtr AllocItemTooltipDescStrDelegate(IntPtr a1, IntPtr item, IntPtr price);
-        private static LocalHook _allocItemTooltipDescStrHook;
-        private static AllocItemTooltipDescStrDelegate _allocItemTooltipDescStrOrigMethod;
+        private static LocalHook _getItemTooltipDescriptionHook;
+        private delegate IntPtr GetItemTooltipDescriptionDelegate(IntPtr self, IntPtr descriptionText, IntPtr additionalText);
+        private static GetItemTooltipDescriptionDelegate _getItemTooltipDescriptionOrigMethod;
 
         private static IntPtr _sharedBuffer;
 
-        public static void Initialize(BridgeInterface bridge, string dataJsonPath)
+        public static void Initialize(Bridge bridge, string dataJsonPath)
         {
             _bridge = bridge;
             _data = JsonConvert.DeserializeObject<Data>(File.ReadAllText(dataJsonPath));
 
-            _bridge.WriteLine("Data loaded.");
+            WriteLine("Data loaded.");
         }
 
         public static void Install()
         {
-            _bridge.WriteLine("Pattern matching...");
+            WriteLine("Pattern searching...");
 
-            var address = Pattern.Search(Pattern.SetTooltipDescriptionMethod);
+            var address = Pattern.Search(Pattern.GetItemTooltipDescriptionMethod);
 
-            _bridge.WriteLine($"Pattern matched at 0x{address.ToInt64():X}");
-
-            _allocItemTooltipDescStrHook = LocalHook.Create(address, new AllocItemTooltipDescStrDelegate(AllocItemTooltipDescStrHook), new object());
-            _allocItemTooltipDescStrHook.ThreadACL.SetExclusiveACL(new[] { 0 });
-            _allocItemTooltipDescStrOrigMethod = (AllocItemTooltipDescStrDelegate)Marshal.GetDelegateForFunctionPointer(_allocItemTooltipDescStrHook.HookBypassAddress, typeof(AllocItemTooltipDescStrDelegate));
-
-            _bridge.WriteLine("Hook installed.");
+            WriteLine($"Pattern found at 0x{address.ToInt64():X}.");
 
             _sharedBuffer = Marshal.AllocHGlobal(2048);
-            _bridge.WriteLine($"Shared buffer allocated at 0x{_sharedBuffer.ToInt64():X}");
+            WriteLine($"Shared buffer allocated at 0x{_sharedBuffer.ToInt64():X}.");
 
-            _bridge.WriteLine("Successfully initialized.");
+            _getItemTooltipDescriptionHook = LocalHook.Create(address, new GetItemTooltipDescriptionDelegate(GetItemTooltipDescription), null);
+            _getItemTooltipDescriptionHook.ThreadACL.SetExclusiveACL(new[] { 0 });
+            _getItemTooltipDescriptionOrigMethod = Marshal.GetDelegateForFunctionPointer<GetItemTooltipDescriptionDelegate>(_getItemTooltipDescriptionHook.HookBypassAddress);
+
+            WriteLine("Hook installed.");
+
+            WriteLine("");
+            WriteLine("Successfully initialized.");
+            WriteLine("");
         }
 
         public static void Join()
@@ -57,18 +57,19 @@ namespace Naldthal
 
                 Thread.Sleep(500);
             }
+
             // ReSharper disable once FunctionNeverReturns
         }
 
         public static void Release()
         {
-            _allocItemTooltipDescStrHook.Dispose();
+            _getItemTooltipDescriptionHook.Dispose();
             LocalHook.Release();
 
             Marshal.FreeHGlobal(_sharedBuffer);
         }
 
-        private static IntPtr AllocItemTooltipDescStrHook(IntPtr self, IntPtr descriptionText, IntPtr additionalText)
+        private static IntPtr GetItemTooltipDescription(IntPtr self, IntPtr descriptionText, IntPtr additionalText)
         {
             if ((NativeMethods.GetAsyncKeyState(0x10) & 0x8000) > 0) // VK_SHIFT
             {
@@ -231,11 +232,16 @@ namespace Naldthal
                 }
                 catch (Exception ex)
                 {
-                    _bridge.WriteLine(ex);
+                    WriteLine(ex);
                 }
             }
 
-            return _allocItemTooltipDescStrOrigMethod(self, descriptionText, additionalText);
+            return _getItemTooltipDescriptionOrigMethod(self, descriptionText, additionalText);
+        }
+
+        private static void WriteLine(object format, params object[] args)
+        {
+            _bridge.WriteLine(format, args);
         }
     }
 }

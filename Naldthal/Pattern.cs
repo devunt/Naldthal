@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Naldthal
@@ -9,9 +8,10 @@ namespace Naldthal
         private const int ChunkSize = 4096;
 
         // 1407C95F0
-        public static Pattern SetTooltipDescriptionMethod { get; } = new Pattern
+        public static Pattern GetItemTooltipDescriptionMethod { get; } = new Pattern
         {
-            Bytes = new byte[] {
+            Bytes = new byte[]
+            {
                 0x48, 0x33, 0xc4,                               // xor rax, rsp
                 0x48, 0x89, 0x84, 0x24, 0xa0, 0x00, 0x00, 0x00, // mov qword ptr ss:[rsp+A0],rax
                 0x48, 0x8b, 0xf1,                               // mov rsi, rcx
@@ -76,7 +76,7 @@ namespace Naldthal
         private enum PatternOffsetType
         {
             RelativeToBegin,
-            RelativeToEnd,
+            RelativeToEnd
         }
     }
 }
