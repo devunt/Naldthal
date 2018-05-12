@@ -55,7 +55,7 @@ namespace Naldthal
             {
                 _bridge.Ping();
 
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
             }
 
             // ReSharper disable once FunctionNeverReturns
