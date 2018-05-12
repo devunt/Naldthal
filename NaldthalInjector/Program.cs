@@ -22,25 +22,41 @@ namespace NaldthalInjector
             Console.OutputEncoding = Encoding.UTF8;
 #endif
 
-            var process = Process.GetProcessesByName("ffxiv_dx11")[0];
+            try
+            {
+                var processes = Process.GetProcessesByName("ffxiv_dx11");
+                if (processes.Length == 0)
+                {
+                    throw new Exception("ffxiv_dx11.exe 프로세스를 찾을 수 없습니다.");
+                }
 
-            string channelName = null;
-            RemoteHooking.IpcCreateServer(ref channelName, WellKnownObjectMode.Singleton, Bridge);
+                string channelName = null;
+                RemoteHooking.IpcCreateServer(ref channelName, WellKnownObjectMode.Singleton, Bridge);
 
-            RemoteHooking.Inject(
-                process.Id,
-                InjectionOptions.NoService | InjectionOptions.DoNotRequireStrongName,
-                null,
-                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "payload.dll"),
-                channelName,
-                Path.GetFullPath("data.json")
-            );
+                RemoteHooking.Inject(
+                    processes[0].Id,
+                    InjectionOptions.NoService | InjectionOptions.DoNotRequireStrongName,
+                    null,
+                    Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "payload.dll"),
+                    channelName,
+                    Path.GetFullPath("data.json")
+                );
 
 #if DEBUG
-            Console.ReadLine();
+                Console.ReadLine();
 #else
-            Application.Run(new SystemTrayApplicationContext());
+                Application.Run(new SystemTrayApplicationContext());
 #endif
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                Console.WriteLine(ex);
+                Console.ReadLine();
+#else
+                MessageBox.Show("실행에 오류가 발생했습니다.\n\n" + ex, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#endif
+            }
         }
 
 #if !DEBUG
@@ -69,6 +85,8 @@ namespace NaldthalInjector
                     }),
                     Visible = true
                 };
+
+                _trayIcon.ShowBalloonTip(5000, "Naldthal", "실행됨", ToolTipIcon.Info);
             }
         }
 #endif

@@ -34,7 +34,7 @@ namespace Naldthal
             }
             catch (Exception ex)
             {
-                _bridge.WriteLine(ex);
+                _bridge.Error(ex);
             }
             finally
             {

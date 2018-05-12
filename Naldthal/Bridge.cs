@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Naldthal
 {
@@ -27,6 +28,16 @@ namespace Naldthal
             Console.WriteLine(formatted);
 #else
             Logs.Add(formatted);
+#endif
+        }
+
+        public void Error(Exception ex)
+        {
+#if DEBUG
+            WriteLine(ex);
+#else
+            MessageBox.Show("실행중 오류가 발생했습니다.\n\n" + ex, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Application.Exit();
 #endif
         }
 
