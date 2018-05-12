@@ -68,7 +68,7 @@ namespace Naldthal
             return new byte[0];
         }
 
-        public static void WriteColorizedString(MemoryStream ms, string text, Color color)
+        public static void WriteColoredString(this MemoryStream ms, string text, Color color)
         {
             var encoded = Encoding.UTF8.GetBytes(text);
 

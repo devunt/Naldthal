@@ -97,9 +97,9 @@ namespace Naldthal
                                 var lastCode = (costItem.Name[costItem.Name.Length - 1] - 0xAC00) % 28;
                                 var josa = lastCode == 0 || lastCode == 8 ? "로" : "으로";
 
-                                Util.WriteColorizedString(ms, "> 다음 NPC 에서 ", Color.Normal);
-                                Util.WriteColorizedString(ms, $"{shop.CostAmount} {costItem.Name}", Color.Cost);
-                                Util.WriteColorizedString(ms, $"{josa} 교환", Color.Normal);
+                                ms.WriteColoredString("> 다음 NPC 에서 ", Color.Normal);
+                                ms.WriteColoredString($"{shop.CostAmount} {costItem.Name}", Color.Cost);
+                                ms.WriteColoredString($"{josa} 교환", Color.Normal);
                                 ms.WriteByte(0xA);
 
                                 foreach (var sellerId in shop.SellerIds)
@@ -108,10 +108,10 @@ namespace Naldthal
                                     var name = npc.Title == "" ? npc.Name : npc.Title;
                                     foreach (var location in npc.Locations)
                                     {
-                                        Util.WriteColorizedString(ms, "  - ", Color.Misc);
-                                        Util.WriteColorizedString(ms, _data.Metadata.Placenames[location.PlaceId],
+                                        ms.WriteColoredString("  - ", Color.Misc);
+                                        ms.WriteColoredString(_data.Metadata.Placenames[location.PlaceId],
                                             Color.Place);
-                                        Util.WriteColorizedString(ms, $" - {name} ({location.X}, {location.Y})",
+                                        ms.WriteColoredString($" - {name} ({location.X}, {location.Y})",
                                             Color.Misc);
                                         ms.WriteByte(0xA);
                                         i++;
@@ -120,7 +120,7 @@ namespace Naldthal
                                     if (i >= 10)
                                     {
                                         i = 0;
-                                        Util.WriteColorizedString(ms, "  - ...이하 생략됨", Color.Misc);
+                                        ms.WriteColoredString("  - ...이하 생략됨", Color.Misc);
                                         ms.WriteByte(0xA);
                                         break;
                                     }
@@ -130,17 +130,17 @@ namespace Naldthal
 
                         if (_data.GCShops.TryGetValue(itemId, out var gcshop))
                         {
-                            Util.WriteColorizedString(ms, "> 총사령부에서 ", Color.Normal);
-                            Util.WriteColorizedString(ms, $"{gcshop.CostAmount} 군표", Color.Cost);
-                            Util.WriteColorizedString(ms, "로 교환", Color.Normal);
+                            ms.WriteColoredString("> 총사령부에서 ", Color.Normal);
+                            ms.WriteColoredString($"{gcshop.CostAmount} 군표", Color.Cost);
+                            ms.WriteColoredString("로 교환", Color.Normal);
                             ms.WriteByte(0xA);
                         }
 
                         if (_data.FCShops.TryGetValue(itemId, out var fcshop))
                         {
-                            Util.WriteColorizedString(ms, "> 총사령부에서 ", Color.Normal);
-                            Util.WriteColorizedString(ms, $"{fcshop.CostAmount} 부대 명성", Color.Cost);
-                            Util.WriteColorizedString(ms, "으로 교환", Color.Normal);
+                            ms.WriteColoredString("> 총사령부에서 ", Color.Normal);
+                            ms.WriteColoredString($"{fcshop.CostAmount} 부대 명성", Color.Cost);
+                            ms.WriteColoredString("으로 교환", Color.Normal);
                             ms.WriteByte(0xA);
                         }
 
@@ -149,20 +149,20 @@ namespace Naldthal
                             if (craftings.Length == 1)
                             {
                                 var classjobName = _data.Metadata.CrafterTypeNames[craftings[0].CrafterType];
-                                Util.WriteColorizedString(ms, "> ", Color.Normal);
-                                Util.WriteColorizedString(ms, $"{craftings[0].Level}레벨 {classjobName}", Color.Cost);
-                                Util.WriteColorizedString(ms, "로 제작", Color.Normal);
+                                ms.WriteColoredString("> ", Color.Normal);
+                                ms.WriteColoredString($"{craftings[0].Level}레벨 {classjobName}", Color.Cost);
+                                ms.WriteColoredString("로 제작", Color.Normal);
                                 ms.WriteByte(0xA);
                             }
                             else
                             {
-                                Util.WriteColorizedString(ms, "> 다음 제작자 클래스로 제작", Color.Normal);
+                                ms.WriteColoredString("> 다음 제작자 클래스로 제작", Color.Normal);
                                 ms.WriteByte(0xA);
 
                                 foreach (var crafting in craftings)
                                 {
                                     var classjobName = _data.Metadata.CrafterTypeNames[crafting.CrafterType];
-                                    Util.WriteColorizedString(ms, $"  - {crafting.Level}레벨 {classjobName}", Color.Cost);
+                                    ms.WriteColoredString($"  - {crafting.Level}레벨 {classjobName}", Color.Cost);
                                     ms.WriteByte(0xA);
                                 }
                             }
@@ -173,20 +173,20 @@ namespace Naldthal
                             if (gatherings.Length == 1)
                             {
                                 var classjobName = _data.Metadata.GathererTypeNames[gatherings[0].GathererType];
-                                Util.WriteColorizedString(ms, "> ", Color.Normal);
-                                Util.WriteColorizedString(ms, $"{classjobName}", Color.Cost);
-                                Util.WriteColorizedString(ms, "로 채집", Color.Normal);
+                                ms.WriteColoredString("> ", Color.Normal);
+                                ms.WriteColoredString($"{classjobName}", Color.Cost);
+                                ms.WriteColoredString("로 채집", Color.Normal);
                                 ms.WriteByte(0xA);
                             }
                             else
                             {
-                                Util.WriteColorizedString(ms, "> 다음 채집가 클래스로 채집", Color.Normal);
+                                ms.WriteColoredString("> 다음 채집가 클래스로 채집", Color.Normal);
                                 ms.WriteByte(0xA);
 
                                 foreach (var gathering in gatherings)
                                 {
                                     var classjobName = _data.Metadata.GathererTypeNames[gathering.GathererType];
-                                    Util.WriteColorizedString(ms, $"  - {classjobName}", Color.Cost);
+                                    ms.WriteColoredString($"  - {classjobName}", Color.Cost);
                                     ms.WriteByte(0xA);
                                 }
                             }
@@ -194,13 +194,13 @@ namespace Naldthal
 
                         if (_data.InstanceContentIds.TryGetValue(itemId, out var icIds))
                         {
-                            Util.WriteColorizedString(ms, "> 다음 임무에서 입수", Color.Normal);
+                            ms.WriteColoredString("> 다음 임무에서 입수", Color.Normal);
                             ms.WriteByte(0xA);
     
                             for (var i = 0; i < icIds.Length; i += 2)
                             {
                                 var icNames = string.Join(", ", icIds.Skip(i).Take(2).Select(icId => _data.Metadata.InstanceContents[icId].Name));
-                                Util.WriteColorizedString(ms, $"  - {icNames}", Color.Place);
+                                ms.WriteColoredString($"  - {icNames}", Color.Place);
                                 ms.WriteByte(0xA);
                             }
                         }
@@ -217,7 +217,7 @@ namespace Naldthal
                                 }
 
                                 ms2.WriteByte(0xA);
-                                Util.WriteColorizedString(ms2, "[입수 방법]", Color.Header);
+                                ms2.WriteColoredString("[입수 방법]", Color.Header);
                                 ms2.WriteByte(0xA);
                                 ms.WriteTo(ms2);
                                 ms2.WriteByte(0x0);
