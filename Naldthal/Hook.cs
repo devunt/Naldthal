@@ -105,7 +105,7 @@ namespace Naldthal
                                 foreach (var sellerId in shop.SellerIds)
                                 {
                                     var npc = _data.Metadata.NPCs[sellerId];
-                                    var name = npc.Title == "" ? npc.Name : npc.Title;
+                                    var name = npc.Title == "" || npc.Title.StartsWith("상인") ? npc.Name : npc.Title;
                                     foreach (var location in npc.Locations)
                                     {
                                         ms.WriteColoredString("  - ", Color.Misc);
