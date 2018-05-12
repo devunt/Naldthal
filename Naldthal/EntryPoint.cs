@@ -35,7 +35,6 @@ namespace Naldthal
             catch (Exception ex)
             {
                 _bridge.WriteLine(ex);
-                _bridge.WriteLine(ex.StackTrace);
             }
             finally
             {
