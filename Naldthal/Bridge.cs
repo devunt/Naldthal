@@ -6,10 +6,7 @@ namespace Naldthal
 {
     public class Bridge : MarshalByRefObject
     {
-        public void WriteLine()
-        {
-            Console.WriteLine();
-        }
+        public List<string> Logs { get; } = new List<string>();
 
         public void WriteLine(object format, params object[] args)
         {
@@ -23,7 +20,14 @@ namespace Naldthal
                 format = BitConverter.ToString(bytes.ToArray()).Replace('-', ' ');
             }
 
-            Console.WriteLine(format.ToString(), args);
+            var datetime = DateTime.Now.ToString("HH:mm:ss");
+            var formatted = $"[{datetime}] {string.Format(format.ToString(), args)}";
+
+#if DEBUG
+            Console.WriteLine(formatted);
+#else
+            Logs.Add(formatted);
+#endif
         }
 
         public void Ping()
