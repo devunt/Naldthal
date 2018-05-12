@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Runtime.Remoting;
 using System.Text;
@@ -29,6 +30,10 @@ namespace NaldthalInjector
                 {
                     throw new Exception("ffxiv_dx11.exe 프로세스를 찾을 수 없습니다.");
                 }
+
+#if !DEBUG
+                new WebClient().DownloadFile("https://raw.githubusercontent.com/devunt/Naldthal/master/Naldthal/data.json", "data.json");
+#endif
 
                 string channelName = null;
                 RemoteHooking.IpcCreateServer(ref channelName, WellKnownObjectMode.Singleton, Bridge);
