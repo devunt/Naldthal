@@ -71,6 +71,7 @@ namespace NaldthalInjector
 
             public SystemTrayApplicationContext()
             {
+                var path = Path.Combine(Path.GetTempPath(), "Naldthal.log");
                 _trayIcon = new NotifyIcon
                 {
                     Icon = Resources.AppIcon,
@@ -78,7 +79,6 @@ namespace NaldthalInjector
                     {
                         new MenuItem("로그", (sender, e) =>
                         {
-                            var path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".log");
                             File.WriteAllLines(path, Bridge.Logs);
                             Process.Start(path);
                         }),
