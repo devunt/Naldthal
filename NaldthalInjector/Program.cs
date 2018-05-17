@@ -31,8 +31,10 @@ namespace NaldthalInjector
                     throw new Exception("ffxiv_dx11.exe 프로세스를 찾을 수 없습니다.");
                 }
 
+                var datapath = Path.GetFullPath("data.json");
+
 #if !DEBUG
-                new WebClient().DownloadFile("https://raw.githubusercontent.com/devunt/Naldthal/master/Naldthal/data.json", "data.json");
+                new WebClient().DownloadFile("https://raw.githubusercontent.com/devunt/Naldthal/master/Naldthal/data.json", datapath);
 #endif
 
                 string channelName = null;
@@ -44,7 +46,7 @@ namespace NaldthalInjector
                     null,
                     Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "payload.dll"),
                     channelName,
-                    Path.GetFullPath("data.json")
+                    datapath
                 );
 
 #if DEBUG
