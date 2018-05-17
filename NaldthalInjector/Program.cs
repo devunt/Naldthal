@@ -34,7 +34,7 @@ namespace NaldthalInjector
                 var datapath = Path.GetFullPath("data.json");
 
 #if !DEBUG
-                new WebClient().DownloadFile("https://raw.githubusercontent.com/devunt/Naldthal/master/Naldthal/data.json", datapath);
+                // new WebClient().DownloadFile("https://raw.githubusercontent.com/devunt/Naldthal/master/Naldthal/data.json", datapath);
 #endif
 
                 string channelName = null;
