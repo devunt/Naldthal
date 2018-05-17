@@ -93,7 +93,7 @@ namespace NaldthalInjector
                     Visible = true
                 };
 
-                _trayIcon.ShowBalloonTip(5000, "Naldthal", "실행됨", ToolTipIcon.Info);
+                _trayIcon.ShowBalloonTip(5000, "Naldthal", "실행중입니다...", ToolTipIcon.Info);
             }
         }
 #endif
