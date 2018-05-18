@@ -5,6 +5,8 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.Remoting;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using EasyHook;
 using Naldthal;
@@ -15,6 +17,7 @@ namespace NaldthalInjector
     internal static class Program
     {
         private static readonly Bridge Bridge = new Bridge();
+        private static Mutex _mutex;
 
         [STAThread]
         private static void Main(string[] args)
@@ -25,12 +28,13 @@ namespace NaldthalInjector
 
             try
             {
-                var processes = Process.GetProcessesByName("ffxiv_dx11");
-                if (processes.Length == 0)
+                _mutex = new Mutex(true, "Naldthal", out var acquired);
+                if (!acquired)
                 {
-                    throw new Exception("ffxiv_dx11.exe 프로세스를 찾을 수 없습니다.");
+                    throw new Exception("이미 실행중입니다.");
                 }
 
+                var process = GetProcess();
                 var datapath = Path.GetFullPath("data.json");
 
 #if !DEBUG
@@ -41,7 +45,7 @@ namespace NaldthalInjector
                 RemoteHooking.IpcCreateServer(ref channelName, WellKnownObjectMode.Singleton, Bridge);
 
                 RemoteHooking.Inject(
-                    processes[0].Id,
+                    process.Id,
                     InjectionOptions.NoService | InjectionOptions.DoNotRequireStrongName,
                     null,
                     Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "payload.dll"),
@@ -64,6 +68,17 @@ namespace NaldthalInjector
                 MessageBox.Show("실행에 오류가 발생했습니다.\n\n" + ex, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
             }
+        }
+
+        private static Process GetProcess()
+        {
+            var processes = Process.GetProcessesByName("ffxiv_dx11");
+            if (processes.Length == 0)
+            {
+                throw new Exception("ffxiv_dx11.exe 프로세스를 찾을 수 없습니다.");
+            }
+
+            return processes[0];
         }
 
 #if !DEBUG
@@ -92,6 +107,24 @@ namespace NaldthalInjector
                     }),
                     Visible = true
                 };
+
+                Task.Run(async () =>
+                {
+                    while (true)
+                    {
+                        try
+                        {
+                            GetProcess();
+                        }
+                        catch
+                        {
+                            _trayIcon.Visible = false;
+                            Application.Exit();
+                        }
+
+                        await Task.Delay(1000);
+                    }
+                });
 
                 _trayIcon.ShowBalloonTip(5000, "Naldthal", "실행중입니다...", ToolTipIcon.Info);
             }
