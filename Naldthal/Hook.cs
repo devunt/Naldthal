@@ -115,10 +115,8 @@ namespace Naldthal
                                     foreach (var location in npc.Locations)
                                     {
                                         ms.WriteColoredString("  - ", Color.Misc);
-                                        ms.WriteColoredString(_data.Metadata.Placenames[location.PlaceId],
-                                            Color.Place);
-                                        ms.WriteColoredString($" - {name} ({location.X}, {location.Y})",
-                                            Color.Misc);
+                                        ms.WriteColoredString(_data.Metadata.Placenames[location.PlaceId], Color.Place);
+                                        ms.WriteColoredString($" - {name} ({location.X}, {location.Y})", Color.Misc);
                                         ms.WriteByte(0xA);
                                         i++;
                                     }
