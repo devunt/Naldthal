@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -17,7 +18,7 @@ namespace Naldthal
         private delegate IntPtr GetItemTooltipDescriptionDelegate(IntPtr self, IntPtr descriptionText, IntPtr additionalText);
         private static GetItemTooltipDescriptionDelegate _getItemTooltipDescriptionOrigMethod;
 
-        private static IntPtr _sharedBuffer;
+        private static readonly Dictionary<int, IntPtr> CachedBufferAddrs = new Dictionary<int, IntPtr>();
 
         public static void Initialize(Bridge bridge, string dataJsonPath)
         {
@@ -34,9 +35,6 @@ namespace Naldthal
             var address = Pattern.Search(Pattern.GetItemTooltipDescriptionMethod);
 
             WriteLine($"Pattern found at 0x{address.ToInt64():X}.");
-
-            _sharedBuffer = Marshal.AllocHGlobal(2048);
-            WriteLine($"Shared buffer allocated at 0x{_sharedBuffer.ToInt64():X}.");
 
             _getItemTooltipDescriptionHook = LocalHook.Create(address, new GetItemTooltipDescriptionDelegate(GetItemTooltipDescription), null);
             _getItemTooltipDescriptionHook.ThreadACL.SetExclusiveACL(new[] { 0 });
@@ -66,7 +64,10 @@ namespace Naldthal
             _getItemTooltipDescriptionHook.Dispose();
             LocalHook.Release();
 
-            Marshal.FreeHGlobal(_sharedBuffer);
+            foreach (var buffer in CachedBufferAddrs.Values)
+            {
+                Marshal.FreeHGlobal(buffer);
+            }
         }
 
         private static IntPtr GetItemTooltipDescription(IntPtr self, IntPtr descriptionText, IntPtr additionalText)
@@ -84,6 +85,11 @@ namespace Naldthal
                     else if (itemId > 500000)
                     {
                         itemId -= 500000;
+                    }
+
+                    if (CachedBufferAddrs.TryGetValue(itemId, out var cachedBufferAddr))
+                    {
+                        return _getItemTooltipDescriptionOrigMethod(self, descriptionText, cachedBufferAddr);
                     }
 
                     using (var ms = new MemoryStream())
@@ -220,13 +226,17 @@ namespace Naldthal
                                 ms2.WriteColoredString("[입수 방법]", Color.Header);
                                 ms2.WriteByte(0xA);
                                 ms.WriteTo(ms2);
-                                ms2.WriteByte(0x0);
 
                                 var buffer = ms2.ToArray();
-                                Util.WriteMemory(_sharedBuffer, buffer, Math.Min(buffer.Length, 2040));
-                            }
+                                var size = Math.Min(buffer.Length, 2047);
 
-                            additionalText = _sharedBuffer;
+                                var bufferAddr = Marshal.AllocHGlobal(size + 1);
+                                CachedBufferAddrs[itemId] = bufferAddr;
+                                Util.WriteMemory(bufferAddr, buffer, size);
+                                Marshal.WriteByte(bufferAddr, size, 0);
+
+                                return _getItemTooltipDescriptionOrigMethod(self, descriptionText, bufferAddr);
+                            }
                         }
                     }
                 }
