@@ -16,6 +16,7 @@ namespace NaldthalInjector
 {
     internal static class Program
     {
+        private const string Version = "v20180521.1";
         private static readonly Bridge Bridge = new Bridge();
         private static Mutex _mutex;
 
@@ -25,6 +26,8 @@ namespace NaldthalInjector
 #if DEBUG
             Console.OutputEncoding = Encoding.UTF8;
 #endif
+
+            Bridge.WriteLine($"Running Naldthal {Version}");
 
             try
             {
@@ -91,6 +94,7 @@ namespace NaldthalInjector
                 var path = Path.Combine(Path.GetTempPath(), "Naldthal.log");
                 _trayIcon = new NotifyIcon
                 {
+                    Text = $"날달 {Version}",
                     Icon = Resources.AppIcon,
                     ContextMenu = new ContextMenu(new[]
                     {
@@ -126,7 +130,7 @@ namespace NaldthalInjector
                     }
                 });
 
-                _trayIcon.ShowBalloonTip(5000, "Naldthal", "실행중입니다...", ToolTipIcon.Info);
+                _trayIcon.ShowBalloonTip(1000, "Naldthal", "실행중입니다...", ToolTipIcon.Info);
             }
         }
 #endif
