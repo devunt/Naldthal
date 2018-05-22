@@ -77,14 +77,17 @@ namespace Naldthal
                 try
                 {
                     var itemId = Marshal.ReadInt32(self, 292);
+                    bool isHq = false, isCollectible = false;
 
                     if (itemId > 1000000)
                     {
                         itemId -= 1000000;
+                        isHq = true;
                     }
                     else if (itemId > 500000)
                     {
                         itemId -= 500000;
+                        isCollectible = true;
                     }
 
                     if (CachedBufferAddrs.TryGetValue(itemId, out var cachedBufferAddr))
@@ -208,6 +211,13 @@ namespace Naldthal
                                 ms.WriteByte(0xA);
                             }
                         }
+
+#if DEBUG
+                        ms.WriteColoredString($"ID: {itemId}", Color.Debug);
+                        ms.WriteByte(0xA);
+                        ms.WriteColoredString($"HQ: {isHq}, Cltb: {isCollectible}", Color.Debug);
+                        ms.WriteByte(0xA);
+#endif
 
                         if (ms.Length > 0)
                         {

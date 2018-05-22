@@ -85,6 +85,7 @@ namespace Naldthal
         public static readonly Color Cost   = new Color(0xAA, 0xFF, 0xAA);
         public static readonly Color Place  = new Color(0xC3, 0xDE, 0xE7);
         public static readonly Color Misc   = new Color(0xCC, 0xCC, 0xCC);
+        public static readonly Color Debug  = new Color(0xFF, 0xFF, 0xAA);
 
         public byte R { get; }
         public byte G { get; }
