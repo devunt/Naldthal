@@ -155,7 +155,7 @@ namespace Naldthal
                         {
                             if (craftings.Length == 1)
                             {
-                                var classjobName = _data.Metadata.CrafterTypeNames[craftings[0].CrafterType];
+                                var classjobName = _data.Metadata.ClassJobCats[craftings[0].ClassJobCat];
                                 ms.WriteColoredString("> ", Color.Normal);
                                 ms.WriteColoredString($"{craftings[0].Level}레벨 {classjobName}", Color.Cost);
                                 ms.WriteColoredString("로 제작", Color.Normal);
@@ -168,7 +168,7 @@ namespace Naldthal
 
                                 foreach (var crafting in craftings)
                                 {
-                                    var classjobName = _data.Metadata.CrafterTypeNames[crafting.CrafterType];
+                                    var classjobName = _data.Metadata.ClassJobCats[crafting.ClassJobCat];
                                     ms.WriteColoredString($"  - {crafting.Level}레벨 {classjobName}", Color.Cost);
                                     ms.WriteByte(0xA);
                                 }
@@ -179,9 +179,9 @@ namespace Naldthal
                         {
                             if (gatherings.Length == 1)
                             {
-                                var classjobName = _data.Metadata.GathererTypeNames[gatherings[0].GathererType];
+                                var classjobName = _data.Metadata.ClassJobCats[gatherings[0].ClassJobCat];
                                 ms.WriteColoredString("> ", Color.Normal);
-                                ms.WriteColoredString($"{classjobName}", Color.Cost);
+                                ms.WriteColoredString($"{gatherings[0].Level}레벨 {classjobName}", Color.Cost);
                                 ms.WriteColoredString("로 채집", Color.Normal);
                                 ms.WriteByte(0xA);
                             }
@@ -192,8 +192,9 @@ namespace Naldthal
 
                                 foreach (var gathering in gatherings)
                                 {
-                                    var classjobName = _data.Metadata.GathererTypeNames[gathering.GathererType];
-                                    ms.WriteColoredString($"  - {classjobName}", Color.Cost);
+                                    var classjobName = _data.Metadata.ClassJobCats[gathering.ClassJobCat];
+                                    ms.WriteColoredString($"  - {gathering.Level}레벨 {classjobName}", Color.Cost);
+                                    ms.WriteByte(0xA);
                                     ms.WriteByte(0xA);
                                 }
                             }

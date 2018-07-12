@@ -11,8 +11,7 @@ namespace Naldthal
         public Dictionary<int, Item> Items { get; set; }
         public Dictionary<int, InstanceContent> InstanceContents { get; set; }
         public Dictionary<int, string> Placenames { get; set; }
-        public Dictionary<int, string> CrafterTypeNames { get; set; }
-        public Dictionary<int, string> GathererTypeNames { get; set; }
+        public Dictionary<int, string> ClassJobCats { get; set; }
 
 
         internal class Item

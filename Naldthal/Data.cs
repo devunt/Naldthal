@@ -34,13 +34,15 @@ namespace Naldthal
 
         internal class Crafting
         {
-            public int CrafterType { get; set; }
+            public int ClassJobCat { get; set; }
             public int Level { get; set; }
         }
 
         internal class Gathering
         {
-            public int GathererType { get; set; }
+            public int ClassJobCat { get; set; }
+            public int Level { get; set; }
+        }
         }
     }
 }
