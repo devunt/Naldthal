@@ -239,9 +239,9 @@ namespace Naldthal
                         }
 
 #if DEBUG
-                        ms.WriteColoredString($"ID: {itemId}", Color.Debug);
+                        ms.WriteColoredString($"> ID: {itemId}", Color.Debug);
                         ms.WriteByte(0xA);
-                        ms.WriteColoredString($"HQ: {isHq}, Cltb: {isCollectible}", Color.Debug);
+                        ms.WriteColoredString($"> HQ: {isHq}, Cltb: {isCollectible}", Color.Debug);
                         ms.WriteByte(0xA);
 #endif
 
