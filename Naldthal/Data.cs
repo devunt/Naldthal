@@ -13,6 +13,7 @@ namespace Naldthal
         public Dictionary<int, int[]> InstanceContentIds { get; set; }
         public Dictionary<int, Crafting[]> Craftings { get; set; }
         public Dictionary<int, Gathering[]> Gatherings { get; set; }
+        public Dictionary<int, RetainerTask[]> RetainerTasks { get; set; }
 
 
         internal class Shop
@@ -43,6 +44,11 @@ namespace Naldthal
             public int ClassJobCat { get; set; }
             public int Level { get; set; }
         }
+
+        internal class RetainerTask
+        {
+            public int ClassJobCat { get; set; }
+            public int Level { get; set; }
         }
     }
 }

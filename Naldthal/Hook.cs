@@ -195,6 +195,31 @@ namespace Naldthal
                                     var classjobName = _data.Metadata.ClassJobCats[gathering.ClassJobCat];
                                     ms.WriteColoredString($"  - {gathering.Level}레벨 {classjobName}", Color.Cost);
                                     ms.WriteByte(0xA);
+                                }
+                            }
+                        }
+
+                        if (_data.RetainerTasks.TryGetValue(itemId, out var retainerTasks))
+                        {
+                            if (retainerTasks.Length == 1)
+                            {
+                                var classjobName = _data.Metadata.ClassJobCats[retainerTasks[0].ClassJobCat];
+                                classjobName = classjobName == "투사 마법사" ? "전투" : classjobName;
+                                ms.WriteColoredString("> ", Color.Normal);
+                                ms.WriteColoredString($"{classjobName} 집사 {retainerTasks[0].Level}레벨", Color.Cost);
+                                ms.WriteColoredString("로 조달", Color.Normal);
+                                ms.WriteByte(0xA);
+                            }
+                            else
+                            {
+                                ms.WriteColoredString("> 다음 클래스 집사로 조달", Color.Normal);
+                                ms.WriteByte(0xA);
+
+                                foreach (var retainerTask in retainerTasks)
+                                {
+                                    var classjobName = _data.Metadata.ClassJobCats[retainerTask.ClassJobCat];
+                                    classjobName = classjobName == "투사 마법사" ? "전투" : classjobName;
+                                    ms.WriteColoredString($"  - {classjobName} 집사 {retainerTask.Level}레벨", Color.Cost);
                                     ms.WriteByte(0xA);
                                 }
                             }
