@@ -7,7 +7,7 @@ namespace Naldthal
     {
         private const int ChunkSize = 4096;
 
-        // 1407C95F0
+        // 140809DF0
         public static Pattern GetItemTooltipDescriptionMethod { get; } = new Pattern
         {
             Bytes = new byte[]
@@ -15,7 +15,7 @@ namespace Naldthal
                 0x48, 0x33, 0xc4,                               // xor rax, rsp
                 0x48, 0x89, 0x84, 0x24, 0xa0, 0x00, 0x00, 0x00, // mov qword ptr ss:[rsp+A0],rax
                 0x48, 0x8b, 0xf1,                               // mov rsi, rcx
-                0x49, 0x8b, 0xe8,                               // mov rbp, r8
+                0x4d, 0x8b, 0xf0,                               // mov r14, r8
                 0x48, 0x8d, 0x4c, 0x24, 0x30,                   // lea rcx, qword ptr ss:[rsp+30]
             },
             OffsetType = PatternOffsetType.RelativeToBegin,
