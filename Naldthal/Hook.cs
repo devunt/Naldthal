@@ -76,7 +76,7 @@ namespace Naldthal
             {
                 try
                 {
-                    var itemId = Marshal.ReadInt32(self, 292);
+                    var itemId = Marshal.ReadInt32(self, 300);
                     bool isHq = false, isCollectible = false;
 
                     if (itemId > 1000000)
